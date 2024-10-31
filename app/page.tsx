@@ -1,6 +1,18 @@
 import Board, { Job } from "./components/Board";
+import Filter from "./components/Filter";
 
-const getJobs = async (): Promise<{ jobPostings: Job[] }> => {
+export type Modality = "internship" | "junior" | "midSenior" | "senior";
+
+export type ExperienceLevel = "remote" | "hybrid" | "onSite";
+
+export type SearchParams = {
+  modality?: Modality;
+  experienceLevel?: ExperienceLevel;
+};
+
+const getJobs = async (
+  params: SearchParams = {}
+): Promise<{ jobPostings: Job[] }> => {
   const response = await fetch(process.env.HYGRAPH_ENDPOINT, {
     method: "POST",
     headers: {
@@ -8,7 +20,7 @@ const getJobs = async (): Promise<{ jobPostings: Job[] }> => {
     },
     body: JSON.stringify({
       query: `query Jobs {
-        jobPostings {
+        jobPostings(orderBy: datePosted_DESC)  {
           jobId
           title
           description
@@ -17,7 +29,8 @@ const getJobs = async (): Promise<{ jobPostings: Job[] }> => {
           modality
           experienceLevel
         }
-      }`,
+        }`,
+      variables: params,
     }),
   });
 
@@ -29,8 +42,17 @@ const getJobs = async (): Promise<{ jobPostings: Job[] }> => {
   return json.data;
 };
 
-export default async function Home() {
-  const { jobPostings } = await getJobs();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const { jobPostings } = await getJobs(searchParams);
 
-  return <Board jobs={jobPostings} />;
+  return (
+    <div className="flex flex-col">
+      <Board jobs={jobPostings} />
+      <Filter />
+    </div>
+  );
 }
