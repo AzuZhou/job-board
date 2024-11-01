@@ -12,11 +12,7 @@ export interface Job {
   experienceLevel: string;
 }
 
-interface BoardProps {
-  jobs: Job[];
-}
-
-const Board: React.FC<BoardProps> = ({ jobs }) => {
+const Board: React.FC<Job[]> = (jobs) => {
   console.log("jobs: ", jobs);
   return <div className=""></div>;
 };

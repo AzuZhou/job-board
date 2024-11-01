@@ -1,9 +1,9 @@
 import Board, { Job } from "./components/Board";
-import Filter from "./components/Filter";
+import Filters from "./components/Filters";
 
-export type Modality = "internship" | "junior" | "midSenior" | "senior";
+export type Modality = "remote" | "hybrid" | "onSite";
 
-export type ExperienceLevel = "remote" | "hybrid" | "onSite";
+export type ExperienceLevel = "internship" | "junior" | "midSenior" | "senior";
 
 export type SearchParams = {
   modality?: Modality;
@@ -19,8 +19,11 @@ const getJobs = async (
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      query: `query Jobs {
-        jobPostings(orderBy: datePosted_DESC)  {
+      query: `query Jobs($modality: Modality, $experienceLevel: ExperienceLevel) {
+        jobPostings(orderBy: datePosted_DESC, where: {
+          modality: $modality
+          experienceLevel: $experienceLevel
+        }) {
           jobId
           title
           description
@@ -29,7 +32,7 @@ const getJobs = async (
           modality
           experienceLevel
         }
-        }`,
+      }`,
       variables: params,
     }),
   });
@@ -51,8 +54,8 @@ export default async function Home({
 
   return (
     <div className="flex flex-col">
-      <Board jobs={jobPostings} />
-      <Filter />
+      <Board {...jobPostings} />
+      <Filters {...searchParams} />
     </div>
   );
 }
