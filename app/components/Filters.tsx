@@ -9,9 +9,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-import { ExperienceLevel, Modality, SearchParams } from "@/app/page";
+import type { ExperienceLevel, Modality, SearchParams } from "@/lib/types";
 import { modalities, experienceLevels } from "@/lib/constants";
 
 const Filters: React.FC<SearchParams> = ({
@@ -19,13 +19,12 @@ const Filters: React.FC<SearchParams> = ({
   experienceLevel: initialExperienceLevel,
 }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [modality, setModality] = useState<Modality | "">(
-    initialModality ?? ""
+    initialModality ?? "",
   );
   const [experienceLevel, setExperienceLevel] = useState<ExperienceLevel | "">(
-    initialExperienceLevel ?? ""
+    initialExperienceLevel ?? "",
   );
 
   const applyFilters = () => {

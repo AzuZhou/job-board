@@ -1,11 +1,4 @@
-type Filter = {
-  id: string;
-  display: string;
-};
-
-type Filters = {
-  [key: string]: Filter;
-};
+import { Filters } from "@/lib/types";
 
 export const modalities: Filters = {
   REMOTE: { id: "remote", display: "Remote" },

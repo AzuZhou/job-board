@@ -1,20 +1,11 @@
-"use client";
-
 import React from "react";
 
-export interface Job {
-  jobId: number;
-  title: string;
-  description: string;
-  datePosted: string;
-  company: string;
-  modality: string;
-  experienceLevel: string;
-}
+import JobPreview from "./JobPreview";
 
-const Board: React.FC<Job[]> = (jobs) => {
-  console.log("jobs: ", jobs);
-  return <div className=""></div>;
+import type { Job } from "@/lib/types";
+
+const Board: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
+  return jobs.map((job) => <JobPreview key={job.jobId} {...job} />);
 };
 
 export default Board;
